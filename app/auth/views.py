@@ -3,7 +3,7 @@ from . import auth
 from flask_login import login_user,logout_user,login_required
 from ..models import User
 from .forms import LoginForm,RegistrationForm
-from ..email import mail_message
+from ..gmail import mail_message
 from .. import db
 
 @auth.route('/login',methods=['GET','POST'])
@@ -35,7 +35,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        mail_message("Welcome to Pitcher","email/welcome_user",user.email,user = user)
+        mail_message("Welcome to Pitcher","mail/welcome_user",user.email,user = user)
 
         return redirect(url_for('auth.login'))
         title = "New Account"
