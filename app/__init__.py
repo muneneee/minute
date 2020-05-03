@@ -15,7 +15,6 @@ def create_app(config_name):
 
     #setting configs
     app.config.from_object(Config_options[config_name])
-    Config_options[config_name].init_app(app)
 
     app.config.update(SECRET_KEY =os.urandom(24))
 
