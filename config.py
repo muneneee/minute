@@ -4,6 +4,7 @@ class Config:
     '''
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://munene:12330122015@localhost/pitcher'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    UPLOADED_PHOTOS_DEST = 'app/static/photos'
 
 
 class ProdConfig(Config):
