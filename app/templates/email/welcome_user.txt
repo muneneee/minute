@@ -1,0 +1,3 @@
+Hi {{user.username}}
+Welcome to the Pitcher 
+You have just signed up for pitcher and we want to welcome you to the community. Please feel free to leave a pitch or vote on others.
