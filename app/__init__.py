@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 from config import Config_options
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_uploads import Uploadset,configure_uploads,IMAGES
+from flask_uploads import UploadSet,configure_uploads,IMAGES
 import os
 
 
@@ -13,8 +13,8 @@ login_manager.login_view = 'auth.login'
 
 
 bootstrap = Bootstrap()
-db = SQLAlchemy()s
-photos = Uploadset('photos',IMAGES)
+db = SQLAlchemy()
+photos = UploadSet('photos',IMAGES)
 
 
 def create_app(config_name):
