@@ -3,6 +3,7 @@ from . import main
 from .forms import UpdateProfile
 from flask_login import login_required
 from .. import db
+from ..models import User
 
 
 @main.route('/')
@@ -31,7 +32,7 @@ def update_profile(uname):
 
     form = UpdateProfile()
 
-    if form.validate_onsubmit():
+    if form.validate_on_submit():
         user.bio = form.bio.data
 
         db.session.add(user)
