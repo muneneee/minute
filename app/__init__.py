@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from config import Config_options
+from flask_sqlalchemy import SQLAlchemy
+import os
 
 
 bootstrap = Bootstrap()
@@ -16,6 +18,12 @@ def create_app(config_name):
     Config_options[config_name].init_app(app)
 
     app.config.update(SECRET_KEY =os.urandom(24))
+
+
+
+    # Initializing flask extensions
+    bootstrap.init_app(app)
+    db.init_app(app)
 
 
      # Registering the blueprint

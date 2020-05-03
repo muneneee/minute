@@ -2,7 +2,7 @@ class Config:
     '''
     General configuration parent class
     '''
-    SECRET_KEY =
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://munene:12330122015@localhost/pitcher'
 
 
 
