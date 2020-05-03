@@ -1,17 +1,18 @@
 from flask import render_template, request,redirect,url_for, abort
 from . import main
-from .forms import UpdateProfile
+from .forms import UpdateProfile,PitchForm
 from flask_login import login_required
 from .. import db,photos
-from ..models import User
+from ..models import User,Pitch
 
 
 @main.route('/')
 def index():
 
     title = 'Welcome to pitcher'
+    pitches = Pitch.get_pitches()
 
-    return render_template('index.html', title = title)
+    return render_template('index.html', title = title, pitches = pitches)
 
 @main.route('/user/<uname>')
 def profile(uname):
@@ -53,3 +54,21 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname = uname))
+
+
+
+@main.route('/pitch', methods = ['GET','POST'])
+def new_pitch():
+    form = PitchForm()
+
+    if form.validate_on_submit():
+        title = form.title.data
+        pitch = form.pitch.data
+        new_pitch = Pitch(title,pitch)
+        new_pitch.save_pitch()
+        return redirect(url_for('main.index'))
+
+
+    title = 'New Pitch'
+    return render_template('pitch.html' ,title = title, pitch_form = form) 
+

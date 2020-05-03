@@ -1,7 +1,15 @@
+{%  import 'macros.html' as macro %}
 {% extends 'base.html'%}
 
 {% block content %}
 <h1>WELCOME TO MY CHANNEL</h1>
 
+<h2>Pitches</h2>
+<hr>
+
+    <a class="btn btn-info" href="/pitch">+Add pitch</a>
+    {% if pitches %}
+        {{macro.displayPitches(pitches)}}
+    {% endif %}
 
 {% endblock %}

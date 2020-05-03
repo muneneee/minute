@@ -5,15 +5,16 @@ from wtforms.validators import Required
 
 
 
-class ReviewForm(FlaskForm):
+class PitchForm(FlaskForm):
 
 
+    category = StringField('Category', validators=[Required()])
     title = StringField('Pitch title',validators=[Required()])
-    Pitch = TextAreaField('Pitch', validators=[Required()])
+    pitch = TextAreaField('Pitch', validators=[Required()])
     submit = SubmitField('Submit')
 
 
 
 class UpdateProfile(FlaskForm):
-    bio = TextAreaField('Tell us about you.',validators =[Required()])
+    bio = TextAreaField('Tell us about yourself.',validators =[Required()])
     submit = SubmitField('Submit')
