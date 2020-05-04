@@ -82,3 +82,15 @@ def new_pitch():
     title = 'New Pitch'
     return render_template('pitch.html' ,title = title, pitch_form = form) 
 
+
+@main.route('/like/<int:pitch_id>/<action>')
+@login_required
+def like_action(pitch_id, action):
+    pitch = Pitch.query.filter_by(id=pitch_id).first_or_404()
+    if action == 'like':
+        current_user.like_pitch(pitch)
+        db.session.commit()
+    if action == 'unlike':
+        current_user.unlike_pitch(pitch)
+        db.session.commit()
+    return redirect(url_for('main.index'))
