@@ -20,7 +20,7 @@ def index():
     title = 'Welcome to pitcher'
     pitches = Pitch.get_pitches()
 
-    return render_template('index.html', title = title, pitches = pitches)
+    return render_template('index.html', title = title, pitches = pitches,pickuplines = pickuplines, interviewpitches = interviewpitches, famousquotes=famousquotes,bibleverses = bibleverses)
 
 @main.route('/user/<uname>')
 def profile(uname):
