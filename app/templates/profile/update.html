@@ -3,6 +3,7 @@
 
 {% block content %}
 <div class="container">
+  {{form.csrf_token}}
   {{wtf.quick_form(form)}}
 </div>
 {% endblock %}

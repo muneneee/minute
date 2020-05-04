@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_uploads import UploadSet,configure_uploads,IMAGES
 from flask_mail import Mail
+from flask_wtf.csrf import CSRFProtect
 import os
 
 
@@ -17,6 +18,7 @@ bootstrap = Bootstrap()
 db = SQLAlchemy()
 photos = UploadSet('photos',IMAGES)
 mail = Mail()
+csrf = CSRFProtect()
 
 def create_app(config_name):
 
@@ -26,7 +28,6 @@ def create_app(config_name):
     #setting configs
     app.config.from_object(Config_options[config_name])
 
-    app.config.update(SECRET_KEY =os.urandom(24))
 
     #configure Uploadset
     configure_uploads(app,photos)
@@ -38,6 +39,7 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    csrf.init_app(app)
 
 
      # Registering the blueprint

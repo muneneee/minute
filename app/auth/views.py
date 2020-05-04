@@ -6,6 +6,7 @@ from .forms import LoginForm,RegistrationForm
 from ..gmail import mail_message
 from .. import db
 
+
 @auth.route('/login',methods=['GET','POST'])
 def login():
     login_form = LoginForm()

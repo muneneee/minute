@@ -5,9 +5,10 @@ class Config:
     '''
     General configuration parent class
     '''
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://munene:12330122015@localhost/pitcher'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://munene:12330122015@localhost/test'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOADED_PHOTOS_DEST = 'app/static/photos'
+    SECRET_KEY =os.environ.get("SECRET_KEY")
 
     #email configs
     MAIL_SERVER = 'smtp.googlemail.com'
@@ -24,9 +25,9 @@ class ProdConfig(Config):
     Args:
         Config: The parent configuration class with General configuration settings
     '''
-    pass
-
-
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    
+                                
 class DevConfig(Config):
     '''
     Development  configuration child class
@@ -40,5 +41,5 @@ class DevConfig(Config):
 
 Config_options = {
     'development': DevConfig,
-    'production': ProdConfig
+    'production': ProdConfig,
 }
