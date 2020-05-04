@@ -1,13 +1,21 @@
 from flask import render_template, request,redirect,url_for, abort
 from . import main
 from .forms import UpdateProfile,PitchForm
-from flask_login import login_required
+from flask_login import login_required, current_user
 from .. import db,photos
 from ..models import User,Pitch
 
 
 @main.route('/')
 def index():
+
+
+    pickuplines = Pitch.query.filter_by(category="Pickup-Lines").order_by(Pitch.posted.desc()).all()
+    interviewpitches = Pitch.query.filter_by(category="Interview-Pitch").order_by(Pitch.posted.desc()).all()
+    famousquotes = Pitch.query.filter_by(category ="Famous-Quotes").order_by(Pitch.posted.desc()).all()
+    bibleverses = Pitch.query.filter_by(category="Bible-Verses").order_by(Pitch.posted.desc()).all()
+    
+
 
     title = 'Welcome to pitcher'
     pitches = Pitch.get_pitches()
@@ -58,13 +66,15 @@ def update_pic(uname):
 
 
 @main.route('/pitch', methods = ['GET','POST'])
+@login_required
 def new_pitch():
     form = PitchForm()
 
     if form.validate_on_submit():
-        title = form.title.data
+        category = form.category.data
+        pitch_title = form.title.data
         pitch = form.pitch.data
-        new_pitch = Pitch(title,pitch)
+        new_pitch = Pitch(category=category,pitch_title=pitch_title,pitch = pitch)
         new_pitch.save_pitch()
         return redirect(url_for('main.index'))
 
