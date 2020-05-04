@@ -23,7 +23,22 @@ class User(db.Model,UserMixin):
 
 
     pitches = db.relationship('Pitch',backref = 'user' , lazy = "dynamic")
+    liked =db.relationship('PitchLike', foreign_keys = 'PitchLike.user_id', backref='user', lazy = 'dynamic')
 
+
+    def like_pitch(self, pitch):
+        if not self.has_liked_pitch(pitch):
+            like = PitchLike(user_id=self.id,pitch_id = pitch.id)
+            db.session.add(like)
+
+    
+    def unlike_pitch(self, pitch):
+        if self.has_liked_pitch(pitch):
+            PitchLike.query.filter_by(user_id=self.id, pitch_id = pitch.id).delete()
+
+    
+    def has_liked_pitch(self, pitch):
+        return PitchLike.query.filter(PitchLike.user_id == self.id, PitchLike.pitch_id ==pitch.id).count() > 0
 
 
     @property
@@ -67,6 +82,8 @@ class Pitch(db.Model):
     author = db.Column(db.Integer,db.ForeignKey("users.id"))
 
     
+    likes = db.relationship('PitchLike' bacckref = 'pitch' lazy ='dynamic')
+
 
     def save_pitch(self):
         db.session.add(self)
@@ -86,3 +103,11 @@ class Pitch(db.Model):
 
     def __repr__(self):
         return f'Pitch {self.pitch_title}'
+
+
+
+class PitchLike(db.Model):
+    __tablename__= 'pitch_like'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitch.id'))
