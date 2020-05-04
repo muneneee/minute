@@ -82,7 +82,7 @@ class Pitch(db.Model):
     author = db.Column(db.Integer,db.ForeignKey("users.id"))
 
     
-    likes = db.relationship('PitchLike' bacckref = 'pitch' lazy ='dynamic')
+    likes = db.relationship('PitchLike', backref = 'pitch', lazy ='dynamic')
 
 
     def save_pitch(self):
@@ -109,5 +109,5 @@ class Pitch(db.Model):
 class PitchLike(db.Model):
     __tablename__= 'pitch_like'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    pitch_id = db.Column(db.Integer, db.ForeignKey('pitch.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))

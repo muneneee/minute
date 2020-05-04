@@ -5,6 +5,14 @@
         <h3>{{pitch.pitch_title}}</h3>
         <h4>  posted on {{pitch.posted.strftime('%d/%m/%Y')}} </h4>
         <p> {{ pitch.pitch}} </p>
+
+        {% if current_user.has_liked_pitch(pitch) %}
+            <a href="{{ url_for('like_action', post_id=post.id, action='unlike') }}">Dislike</a>
+        {% else %}
+            <a href="{{ url_for('like_action', post_id=post.id, action='like') }}">Like</a>
+        {% endif %}
+        {{ pitch.likes.count() }} likes
+
     </div>
     {% endfor %}
 {% endmacro %}
