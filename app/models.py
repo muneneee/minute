@@ -24,14 +24,13 @@ class User(db.Model,UserMixin):
 
     pitches = db.relationship('Pitch',backref = 'user' , lazy = "dynamic")
     liked =db.relationship('PitchLike', foreign_keys = 'PitchLike.user_id', backref='user', lazy = 'dynamic')
-
+    comments = db.relationship('Comment', backref = 'user', lazy ='dynamic')
 
     def like_pitch(self, pitch):
         if not self.has_liked_pitch(pitch):
             like = PitchLike(user_id=self.id,pitch_id = pitch.id)
             db.session.add(like)
 
-    
     def unlike_pitch(self, pitch):
         if self.has_liked_pitch(pitch):
             PitchLike.query.filter_by(user_id=self.id, pitch_id = pitch.id).delete()
@@ -83,6 +82,7 @@ class Pitch(db.Model):
 
     
     likes = db.relationship('PitchLike', backref = 'pitch', lazy ='dynamic')
+    comments = db.relationship('Comment', backref = 'pitch', lazy ='dynamic')
 
 
     def save_pitch(self):
@@ -111,3 +111,24 @@ class PitchLike(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    comment =  db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+    posted = db.Column(db.DateTime,default=datetime.utcnow)
+
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    
+    @classmethod
+    def get_comments(cls):
+        comments= Comment.query.filter_by(pitch_id=id).all()
+        return comments
+

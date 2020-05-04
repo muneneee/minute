@@ -1,9 +1,9 @@
 from flask import render_template, request,redirect,url_for, abort
 from . import main
-from .forms import UpdateProfile,PitchForm
+from .forms import UpdateProfile,PitchForm,CommentForm
 from flask_login import login_required, current_user
 from .. import db,photos
-from ..models import User,Pitch
+from ..models import User,Pitch,Comment
 
 
 @main.route('/')
@@ -20,16 +20,19 @@ def index():
     title = 'Welcome to pitcher'
     pitches = Pitch.get_pitches()
 
-    return render_template('index.html', title = title, pitches = pitches,pickuplines = pickuplines, interviewpitches = interviewpitches, famousquotes=famousquotes,bibleverses = bibleverses)
+    return render_template('index.html', title = title, pitches = pitches, pickuplines = pickuplines, interviewpitches = interviewpitches, famousquotes=famousquotes,bibleverses = bibleverses)
 
 @main.route('/user/<uname>')
 def profile(uname):
     user = User.query.filter_by(username = uname).first()
+    title = f'{uname} profile'
+
+    get_pitches = Pitch.query.filter_by(author = User.id).all()
 
     if user is None:
         abort(404)
 
-    return render_template("profile/profile.html", user = user)
+    return render_template("profile/profile.html", user = user, title = title, pitches_num = get_pitches)
 
 
 @main.route('/user/<uname>/update',methods = ['GET','POST'])
@@ -94,3 +97,26 @@ def like_action(pitch_id, action):
         current_user.unlike_pitch(pitch)
         db.session.commit()
     return redirect(url_for('main.index'))
+
+
+
+@main.route('/pitch/<int:pitch_id>/comment', methods = ['GET','POST'])
+@login_required
+def comment(pitch_id):
+    comment_form = CommentForm()
+    my_pitch = Pitch.query.get(pitch_id)
+
+    if my_pitch is None:
+        abort(404)
+    
+
+    if comment_form.validate_on_submit():
+        comment = comment_form.comment.data
+        new_comment = Comment(comment = comment, pitch_id = pitch_id, user = current_user)
+        new_comment.save_comment()
+        return redirect(url_for('.comment', pitch_id=pitch_id))
+
+    all_comments = Comment.query.filter_by(pitch_id=pitch_id).all()
+
+    title = 'comment'
+    return render_template('comment.html' ,title = title, comment_form = comment_form, comment=all_comments) 

@@ -5,14 +5,32 @@
         <h3>{{pitch.pitch_title}}</h3>
         <h4>  posted on {{pitch.posted.strftime('%d/%m/%Y')}} </h4>
         <p> {{ pitch.pitch}} </p>
+       
+        <button class="btn btn-outline-primary"><a href="{{ url_for('main.like_action', pitch_id=pitch.id, action='like') }}">Like</a></button>
+        
+        <button class="btn btn-outline-danger"><a href="{{ url_for('main.like_action', pitch_id=pitch.id, action='unlike') }}">Dislike</a></button>
+        <button class="btn btn-default"><a href="{{url_for('main.comment',pitch_id=pitch.id)}}">Comment</a></button>
 
-        {% if current_user.has_liked_pitch(pitch) %}
-            <a href="{{ url_for('like_action', post_id=post.id, action='unlike') }}">Dislike</a>
-        {% else %}
-            <a href="{{ url_for('like_action', post_id=post.id, action='like') }}">Like</a>
-        {% endif %}
         {{ pitch.likes.count() }} likes
+
 
     </div>
     {% endfor %}
+{% endmacro %}
+
+{% macro displayComments(all_comments)%}
+    {% if all_comments%}
+
+        {% for comment in all_comments %}
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 review-card">
+
+            <div class="media-body">
+                <h4>{{comment.user.username}}</h4>
+                <p>{{comment.comment}}</p>
+            </div>
+
+        </div>
+        {% endfor %}
+    {% endif %}
+
 {% endmacro %}

@@ -18,3 +18,8 @@ class PitchForm(FlaskForm):
 class UpdateProfile(FlaskForm):
     bio = TextAreaField('Tell us about yourself.',validators =[Required()])
     submit = SubmitField('Submit')
+
+
+class CommentForm(FlaskForm):
+    comment = TextAreaField("Leave a comment", validators = [Required()])
+    submit = SubmitField("Post")
